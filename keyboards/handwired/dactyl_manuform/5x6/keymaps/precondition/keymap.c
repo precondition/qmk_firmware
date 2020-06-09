@@ -1,5 +1,4 @@
 /* A standard layout for the Dactyl Manuform 5x6 Keyboard */ 
-/* The last/lowest row of keys on the keyboard seems to be mixed up within each split. */
 
 #include QMK_KEYBOARD_H
 

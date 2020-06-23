@@ -210,6 +210,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             has_typed_accent = true;
         } else {
             if (has_typed_accent) {
+                has_typed_accent = false;
                 unregister_code(KC_C);
             }
         }
@@ -224,6 +225,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             has_typed_accent = true;
         } else {
             if (has_typed_accent) {
+                has_typed_accent = false;
                 unregister_code(KC_E);
             }
         }

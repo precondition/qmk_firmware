@@ -404,6 +404,7 @@ const uint16_t PROGMEM BSPC_H_COMBO[] = {KC_BSPC, KC_H, COMBO_END};
 // To do : Change from KC_# to HOME_# once combos work with mod taps
 // See this PR https://github.com/qmk/qmk_firmware/pull/8591
 // Currently utterly useless as I don't have KC_A or KC_N in my keymap.
+// UPDATE: Check out the mod-tap-combos branch for the updated keymap with working modtap combos.
 const uint16_t PROGMEM BSPC_A_COMBO[] = {KC_BSPC, KC_A, COMBO_END};
 const uint16_t PROGMEM BSPC_N_COMBO[] = {KC_BSPC, KC_N, COMBO_END};
 

@@ -20,7 +20,7 @@ enum layer_names {
 };
 
 // Layer keys
-#define NAV MO(_NAV)
+#define NAV TT(_NAV)
 #define GNAV MO(_GNAV)
 #define SYM MO(_SYM)
 #define ACCENTS OSL(_ACCENTS)

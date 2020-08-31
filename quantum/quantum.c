@@ -145,7 +145,13 @@ void reset_keyboard(void) {
 }
 
 /* Convert record into usable keycode via the contained event. */
-uint16_t get_record_keycode(keyrecord_t *record, bool update_layer_cache) { return get_event_keycode(record->event, update_layer_cache); }
+uint16_t get_record_keycode(keyrecord_t *record, bool update_layer_cache) {
+#ifdef COMBO_ENABLE
+    if (record->keycode) { return record->keycode; }
+#endif
+    return get_event_keycode(record->event, update_layer_cache);
+}
+
 
 /* Convert event into usable keycode. Checks the layer cache to ensure that it
  * retains the correct keycode after a layer change, if the key is still pressed.
@@ -285,6 +291,9 @@ bool process_record_quantum(keyrecord_t *record) {
 #endif
 #if defined(RGBLIGHT_ENABLE) || defined(RGB_MATRIX_ENABLE)
             process_rgb(keycode, record) &&
+#endif
+#ifdef JOYSTICK_ENABLE
+            process_joystick(keycode, record) &&
 #endif
             true)) {
         return false;
@@ -447,8 +456,7 @@ void send_string_with_delay(const char *str, uint8_t interval) {
             if (ascii_code == SS_TAP_CODE) {
                 // tap
                 uint8_t keycode = *(++str);
-                register_code(keycode);
-                unregister_code(keycode);
+                tap_code(keycode);
             } else if (ascii_code == SS_DOWN_CODE) {
                 // down
                 uint8_t keycode = *(++str);
@@ -489,8 +497,7 @@ void send_string_with_delay_P(const char *str, uint8_t interval) {
             if (ascii_code == SS_TAP_CODE) {
                 // tap
                 uint8_t keycode = pgm_read_byte(++str);
-                register_code(keycode);
-                unregister_code(keycode);
+                tap_code(keycode);
             } else if (ascii_code == SS_DOWN_CODE) {
                 // down
                 uint8_t keycode = pgm_read_byte(++str);

@@ -212,7 +212,16 @@ void process_record(keyrecord_t *record) {
 }
 
 void process_record_handler(keyrecord_t *record) {
+#ifdef COMBO_ENABLE
+    action_t action;
+    if (record->keycode) {
+        action = action_for_keycode(record->keycode);
+    } else {
+        action = store_or_get_action(record->event.pressed, record->event.key);
+    }
+#else
     action_t action = store_or_get_action(record->event.pressed, record->event.key);
+#endif
     dprint("ACTION: ");
     debug_action(action);
 #ifndef NO_ACTION_LAYER
@@ -370,6 +379,8 @@ void process_action(keyrecord_t *record, action_t action) {
                             dprint("MODS_TAP: Tap: unregister_code\n");
                             if (action.layer_tap.code == KC_CAPS) {
                                 wait_ms(TAP_HOLD_CAPS_DELAY);
+                            } else {
+                                wait_ms(TAP_CODE_DELAY);
                             }
                             unregister_code(action.key.code);
                         } else {
@@ -406,7 +417,9 @@ void process_action(keyrecord_t *record, action_t action) {
         /* Mouse key */
         case ACT_MOUSEKEY:
             if (event.pressed) {
+                mousekey_on(action.key.code);
                 switch (action.key.code) {
+#    ifdef PS2_MOUSE_ENABLE
                     case KC_MS_BTN1:
                         tp_buttons |= (1 << 0);
                         break;
@@ -416,13 +429,15 @@ void process_action(keyrecord_t *record, action_t action) {
                     case KC_MS_BTN3:
                         tp_buttons |= (1 << 2);
                         break;
+#    endif
                     default:
+                        mousekey_send();
                         break;
                 }
-                mousekey_on(action.key.code);
-                mousekey_send();
             } else {
+                mousekey_off(action.key.code);
                 switch (action.key.code) {
+#    ifdef PS2_MOUSE_ENABLE
                     case KC_MS_BTN1:
                         tp_buttons &= ~(1 << 0);
                         break;
@@ -432,11 +447,11 @@ void process_action(keyrecord_t *record, action_t action) {
                     case KC_MS_BTN3:
                         tp_buttons &= ~(1 << 2);
                         break;
+#    endif
                     default:
+                        mousekey_send();
                         break;
                 }
-                mousekey_off(action.key.code);
-                mousekey_send();
             }
             break;
 #endif
@@ -996,6 +1011,24 @@ void clear_keyboard_but_mods_and_keys() {
  */
 bool is_tap_key(keypos_t key) {
     action_t action = layer_switch_get_action(key);
+    return is_tap_action(action);
+}
+
+/** \brief Utilities for actions. (FIXME: Needs better description)
+ *
+ * FIXME: Needs documentation.
+ */
+bool is_tap_record(keyrecord_t *record) {
+#ifdef COMBO_ENABLE
+    action_t action;
+    if (record->keycode) {
+        action = action_for_keycode(record->keycode);
+    } else {
+        action = layer_switch_get_action(record->event.key);
+    }
+#else
+    action_t action = layer_switch_get_action(record->event.key);
+#endif
     return is_tap_action(action);
 }
 

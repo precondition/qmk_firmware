@@ -43,8 +43,6 @@ This is a C header file that is one of the first things included, and will persi
   * generally who/whatever brand produced the board
 * `#define PRODUCT Board`
   * the name of the keyboard
-* `#define DESCRIPTION a keyboard`
-  * a short description of what the keyboard is
 * `#define MATRIX_ROWS 5`
   * the number of rows in your keyboard's matrix
 * `#define MATRIX_COLS 15`
@@ -187,7 +185,7 @@ If you define these options you will enable the associated feature, which may in
   * Flag to enable per-combo COMBO_TERM extension and `get_combo_must_hold()` function
 * `#define COMBO_TERM_PER_COMBO`
   * Flag to enable per-combo COMBO_TERM extension and `get_combo_term()` function
-* `#define VARIABLE_COMBO_LEN`
+* `#define COMBO_VARIABLE_LEN
   * Flag for defining the number of Combos in user keymaps dynamically
 * `#define COMBO_PERMISSIVE_HOLD`
   * Flag for allowing Mod-Tap style combo usage
@@ -262,7 +260,10 @@ There are a few different ways to set handedness for split keyboards (listed in 
 * `#define SPLIT_HAND_PIN B7`
   * For using high/low pin to determine handedness, low = right hand, high = left hand. Replace `B7` with the pin you are using. This is optional, and if you leave `SPLIT_HAND_PIN` undefined, then you can still use the EE_HANDS method or MASTER_LEFT / MASTER_RIGHT defines like the stock Let's Split uses.
 
-* `#define EE_HANDS` (only works if `SPLIT_HAND_PIN` is not defined)
+* `#define SPLIT_HAND_MATRIX_GRID <out_pin>,<in_pin>`
+  * The handedness is determined by using the intersection of the keyswitches in the key matrix, which does not exist. Normally, when this intersection is shorted (level low), it is considered left. If you define `#define SPLIT_HAND_MATRIX_GRID_LOW_IS_RIGHT`, it is determined to be right when the level is low.
+
+* `#define EE_HANDS` (only works if `SPLIT_HAND_PIN` and `SPLIT_HAND_MATRIX_GRID` are not defined)
   * Reads the handedness value stored in the EEPROM after `eeprom-lefthand.eep`/`eeprom-righthand.eep` has been flashed to their respective halves.
 
 * `#define MASTER_RIGHT`

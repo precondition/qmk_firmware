@@ -25,52 +25,52 @@ extern combo_t  key_combos[];
 extern int      COMBO_LEN;
 #endif
 
-__attribute__((weak)) void process_combo_event(uint8_t combo_index, bool pressed) {}
+__attribute__((weak)) void process_combo_event(uint16_t combo_index, bool pressed) {}
 
 #ifdef COMBO_MUST_HOLD_PER_COMBO
-__attribute__((weak)) bool get_combo_must_hold(uint8_t index, combo_t *combo) { return false; }
+__attribute__((weak)) bool get_combo_must_hold(uint16_t index, combo_t *combo) { return false; }
 #endif
 
 #ifdef COMBO_TERM_PER_COMBO
-__attribute__((weak)) uint16_t get_combo_term(uint8_t index, combo_t *combo) { return COMBO_TERM; }
+__attribute__((weak)) uint16_t get_combo_term(uint16_t index, combo_t *combo) { return COMBO_TERM; }
 #endif
 
-static uint16_t timer               = 0;
-static uint8_t  prepared_combo_index  = -1;
-static bool     is_active           = true;
-static bool     b_combo_enable      = true;  // defaults to enabled
+static uint16_t timer                 = 0;
+static uint16_t  prepared_combo_index = -1;
+static bool     is_active             = true;
+static bool     b_combo_enable        = true;  // defaults to enabled
 static combo_t  *prepared_combo       = NULL;
+static uint16_t longest_term          = 0;
 #define COMBO_PREPARED (prepared_combo && !prepared_combo->disabled)
 
 static uint8_t buffer_size = 0;
 static keyrecord_t key_buffer[MAX_COMBO_LENGTH];
 
-static inline void send_combo(uint16_t keycode, bool pressed, uint8_t combo_index) {
+static inline void send_combo(uint16_t keycode, bool pressed, uint16_t combo_index) {
     if (keycode) {
-        if (pressed) {
-            if (KEYCODE_IS_MOD(keycode)) {
-                register_mods(keycode >> 8);
-                register_code((uint8_t)keycode);
-            } else {
-                register_code16(keycode);
-            }
-        } else {
-            if (KEYCODE_IS_MOD(keycode)) {
-                unregister_mods(keycode >> 8);
-                unregister_code((uint8_t)keycode);
-            } else {
-                unregister_code16(keycode);
-            }
-        }
+        keyrecord_t record = {
+            .event = {
+                .key = {.col = 254, .row = 254},
+                .time = timer_read()|1,
+                .pressed = pressed,
+            },
+            .keycode = keycode,
+        };
+#ifndef NO_ACTION_TAPPING
+        action_tapping_process(record);
+#else
+        process_record(record);
+#endif
     } else {
         process_combo_event(combo_index, pressed);
     }
 }
 
 void clear_combos(bool clear_state) {
-    uint8_t index = 0;
+    uint16_t index = 0;
     prepared_combo = NULL;
     prepared_combo_index = -1;
+    longest_term = 0;
 #ifndef COMBO_VARIABLE_LEN
     for (index = 0; index < COMBO_COUNT; ++index) {
 #else
@@ -105,13 +105,8 @@ static inline void dump_key_buffer(bool emit) {
 }
 
 void fire_combo(void) {
-#ifndef NO_ACTION_TAPPING
-    action_tapping_process((keyrecord_t){}); // trigger possible ModTaps
-#endif
     send_combo(prepared_combo->keycode, true, prepared_combo_index);
     prepared_combo->active = true;
-    prepared_combo = NULL;
-    prepared_combo_index = -1;
     dump_key_buffer(false);
 }
 
@@ -127,9 +122,9 @@ void fire_combo(void) {
         combo->state &= ~(1 << key); \
     } while (0)
 
-static bool process_single_combo(combo_t *combo, uint16_t keycode, keyrecord_t *record, uint8_t combo_index) {
+static bool process_single_combo(combo_t *combo, uint16_t keycode, keyrecord_t *record, uint16_t combo_index) {
     uint8_t count = 0;
-    uint8_t index = -1;
+    uint16_t index = -1;
     /* Find index of keycode and number of combo keys */
     for (const uint16_t *keys = combo->keys;; ++count) {
         uint16_t key = pgm_read_word(&keys[count]);
@@ -149,22 +144,25 @@ static bool process_single_combo(combo_t *combo, uint16_t keycode, keyrecord_t *
     bool is_combo_active = is_active & !combo->disabled;
 
     if (record->event.pressed) {
+        uint16_t time = COMBO_TERM;
+#if defined(COMBO_TERM_PER_COMBO)
+        time = get_combo_term(combo_index, combo);
+#elif defined(COMBO_MUST_HOLD_PER_COMBO)
+        if (get_combo_must_hold(combo_index, combo)) time = COMBO_MOD_TERM;
+#elif defined(COMBO_MUST_HOLD_MODS)
+        if (KEYCODE_IS_MOD(combo->keycode)) time = COMBO_MOD_TERM;
+#endif
         if (!combo->active) {
             KEY_STATE_DOWN(index);
+            if (longest_term < time) {
+                longest_term = time;
+            }
         }
         if (is_combo_active) {
             if (ALL_COMBO_KEYS_ARE_DOWN) { /* Combo was pressed */
                 /* Save the combo so we can fire it after COMBO_TERM */
 
                 /* Don't prepare this combo if its combo term has passed. */
-                uint16_t time = COMBO_TERM;
-#if defined(COMBO_TERM_PER_COMBO)
-                time = get_combo_term(combo_index, combo);
-#elif defined(COMBO_MUST_HOLD_PER_COMBO)
-                if (get_combo_must_hold(combo_index, combo)) time = COMBO_MOD_TERM;
-#elif defined(COMBO_MUST_HOLD_MODS)
-                if (KEYCODE_IS_MOD(combo->keycode)) time = COMBO_MOD_TERM;
-#endif
                 if (timer_elapsed(timer) < time) {
                     prepared_combo = combo;
                     prepared_combo_index = combo_index;
@@ -245,9 +243,9 @@ bool process_combo(uint16_t keycode, keyrecord_t *record) {
 #endif
 
 #ifndef COMBO_VARIABLE_LEN
-    for (uint8_t idx = 0; idx < COMBO_COUNT; ++idx) {
+    for (uint16_t idx = 0; idx < COMBO_COUNT; ++idx) {
 #else
-    for (uint8_t idx = 0; idx < COMBO_LEN; ++idx) {
+    for (uint16_t idx = 0; idx < COMBO_LEN; ++idx) {
 #endif
         combo_t *combo = &key_combos[idx];
         is_combo_key |= process_single_combo(combo, keycode, record, idx);
@@ -296,12 +294,14 @@ void matrix_scan_combo(void) {
     }
 #endif
 
+    if (longest_term > time) {
+        time = longest_term;
+    }
+
     if (is_active && timer && timer_elapsed(timer) > time) {
         if (COMBO_PREPARED) {
             fire_combo();
         } else {
-            prepared_combo = NULL;
-            prepared_combo_index = -1;
             dump_key_buffer(true);
             timer = 0;
             is_active = true;

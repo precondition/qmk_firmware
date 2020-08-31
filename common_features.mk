@@ -246,12 +246,13 @@ ifeq ($(strip $(SERIAL_LINK_ENABLE)), yes)
     VAPTH += $(SERIAL_PATH)
 endif
 
-ifneq ($(strip $(VARIABLE_TRACE)),)
+VARIABLE_TRACE ?= no
+ifneq ($(strip $(VARIABLE_TRACE)),no)
     SRC += $(QUANTUM_DIR)/variable_trace.c
     OPT_DEFS += -DNUM_TRACED_VARIABLES=$(strip $(VARIABLE_TRACE))
-ifneq ($(strip $(MAX_VARIABLE_TRACE_SIZE)),)
-    OPT_DEFS += -DMAX_VARIABLE_TRACE_SIZE=$(strip $(MAX_VARIABLE_TRACE_SIZE))
-endif
+    ifneq ($(strip $(MAX_VARIABLE_TRACE_SIZE)),)
+        OPT_DEFS += -DMAX_VARIABLE_TRACE_SIZE=$(strip $(MAX_VARIABLE_TRACE_SIZE))
+    endif
 endif
 
 ifeq ($(strip $(LCD_ENABLE)), yes)
@@ -527,4 +528,11 @@ ifeq ($(strip $(AUTO_SHIFT_ENABLE)), yes)
     ifeq ($(strip $(AUTO_SHIFT_MODIFIERS)), yes)
         OPT_DEFS += -DAUTO_SHIFT_MODIFIERS
     endif
+endif
+
+ifeq ($(strip $(JOYSTICK_ENABLE)), yes)
+    OPT_DEFS += -DJOYSTICK_ENABLE
+    SRC += $(QUANTUM_DIR)/process_keycode/process_joystick.c
+    SRC += $(QUANTUM_DIR)/joystick.c
+    SRC += analog.c
 endif

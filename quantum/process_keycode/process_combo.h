@@ -60,11 +60,11 @@ typedef struct {
 #endif
 
 /* check if keycode is only modifiers */
-#define KEYCODE_IS_MOD(code) (IS_MOD((uint8_t)code) || (code && (uint8_t)code == KC_NO))
+#define KEYCODE_IS_MOD(code) (IS_MOD(code) || ((code & 0xFF00) <= QK_MODS_MAX && !(code & 0xFF)))
 
 bool process_combo(uint16_t keycode, keyrecord_t *record);
 void matrix_scan_combo(void);
-void process_combo_event(uint8_t combo_index, bool pressed);
+void process_combo_event(uint16_t combo_index, bool pressed);
 
 void combo_enable(void);
 void combo_disable(void);

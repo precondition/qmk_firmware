@@ -428,6 +428,16 @@ See also: [Mod-Tap](mod_tap.md)
 |`MEH_T(kc)`  |                                                                 |Left Control, Shift and Alt when held, `kc` when tapped       |
 |`HYPR_T(kc)` |`ALL_T(kc)`                                                      |Left Control, Shift, Alt and GUI when held, `kc` when tapped - more info [here](https://brettterpstra.com/2012/12/08/a-useful-caps-lock-key/)|
 
+## Tapping Term Keys :id=tapping-term-keys
+
+See also: [Tapping Term Keys](tap_hold#tapping-term-keys)
+
+| Key       | Description                                                           |
+|-----------|-----------------------------------------------------------------------|
+| `KC_TAPP` | "Tapping Term Print": Types the current tapping term, in milliseconds |
+| `KC_TAPU` | "Tapping Term Up": Increases the current tapping term by 5ms          |
+| `KC_TAPD` | "Tapping Term Down": Decreases the current tapping term by 5ms        |
+
 ## RGB Lighting :id=rgb-lighting
 
 See also: [RGB Lighting](feature_rgblight.md)

@@ -139,10 +139,10 @@ Nav Layer: Media, navigation
                        `----------------------------------'  `----------------------------------'
 ```
 
-This is where you'll find all the keys that are generally between the main block of a classic keyboard and the numpad in addition to modifiers on easy access on the home row for fast and comfortable chording with navigation keys and media controls.
+This is where you'll find all the keys that are generally between the main block of a classic keyboard and the numpad in addition to media controls and modifiers on easy access on the home row for fast and comfortable chording with navigation keys.
 
 Useful mnemonics:
-- “GACS“ to remember the order of the modifiers on the left-hand home row
+- “GACS” to remember the order of the modifiers on the left-hand home row
 - <kbd>Scroll Lock</kbd> is on the same key as <kbd>Caps Lock</kbd> because they're both locks
 - <kbd>Delete</kbd> is on the same key as <kbd>Backspace</kbd> because they both erase characters
 - <kbd>Home</kbd> is the leftmost position on the current line so it is above <kbd>←</kbd>. Same logic applies for <kbd>End</kbd>.
@@ -168,7 +168,7 @@ The top row is the unshifted num row, the home row of the layer is the shifted n
 
 The layout of the first two rows needs no introduction, you're already used to them but it's worth looking into the structure of the bottom row.
 
-The two halves are mirrored in a sense. On the right, you can find <kbd>,</kbd> <kbd>.</kbd> <kbd>/</kbd> on their usual spot with the addition of <kbd>Shift</kbd>+<kbd>/</kbd>=<kbd>?</kbd> to the right of the <kbd>/</kbd> key to remove the need to press simultaneously <kbd>Sym</kbd> and a <kbd>Shift</kbd> key to access `?`. 
+The two halves are mirrored in a sense. On the right, you can find <kbd>,</kbd> <kbd>.</kbd> <kbd>/</kbd> at their usual spots with the addition of <kbd>Shift</kbd>+<kbd>/</kbd>=<kbd>?</kbd> to the right of the <kbd>/</kbd> key to remove the need to press simultaneously <kbd>Sym</kbd> and a <kbd>Shift</kbd> key to access `?`. 
 
 Now, if you look at the left side, you'll notice that the mirror of <kbd>,</kbd> is <kbd>;</kbd>, the mirror of <kbd>.</kbd> is <kbd>:</kbd> and the mirror of <kbd>/</kbd> is <kbd>\\</kbd>. The same logic used for <kbd>Shift</kbd>+<kbd>/</kbd>=<kbd>?</kbd> also applies to <kbd>Shift</kbd>+<kbd>\\</kbd>=<kbd>|</kbd>.
 

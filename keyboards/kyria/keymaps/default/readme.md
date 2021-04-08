@@ -3,7 +3,7 @@
 [insert pretty KLE visualization once the keymap is vetted]
 
 The default keymap contains 5 layers which allows it to include all keys found on a ISO layout TKL keyboard plus media keys.
-Hardware features of the Kyria such as OLEDs, rotary encoders and underlight are also supported.
+Hardware features of the Kyria such as OLEDs, rotary encoders and underglow are also supported.
 
 The five different layers are the following:
 1. Base layer (QWERTY, Colemak-DH or Dvorak)
@@ -210,7 +210,7 @@ Adjust Layer: Default layer settings, RGB
                        `----------------------------------'  `----------------------------------'
 ```
 
-Default layer settings on the left and various RGB underlight controls on the right.
+Default layer settings on the left and various RGB underglow controls on the right.
 
 The default layer settings are lined up on the middle finger column because the home middle finger key is <kbd>D</kbd> on QWERTY (like the “D” in “Dvorak”) and the lower middle finger key is <kbd>C</kbd> on QWERTY (like the “C” in “Colemak”). I can hear you say that “QWERTY” doesn't start with “E” but Dvorak and Colemak were already aligned in a column so the QWERTY may as well join the formation.
 
@@ -236,8 +236,8 @@ The left rotary encoder is programmed to control the volume whereas the right en
 ### OLEDs
 The OLEDs display the current layer at the top of the active layers stack, the Kyria logo and lock status (caps lock, num lock, scroll lock).
 
-### Underlight
-The underlight LEDs should be red.
+### Underglow
+The underglow LEDs should be red.
 
 ## Going further...
 

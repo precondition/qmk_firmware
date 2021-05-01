@@ -28,15 +28,15 @@ void tapping_term_report(void) {
 bool process_tap_term_keys(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         switch (keycode) {
-            case KC_TAPP:
+            case TK_PRNT:
                 tapping_term_report();
                 return true;
 
-            case KC_TAPU:
+            case TK_UP:
                 tapping_term += 5;
                 return true;
 
-            case KC_TAPD:
+            case TK_DOWN:
                 tapping_term -= 5;
                 return true;
         }

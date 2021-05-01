@@ -515,11 +515,9 @@ enum quantum_keycodes {
     RGB_MODE_TWINKLE,
 
     // Tapping term setup
-#ifdef TAP_TERM_KEYS_ENABLE
-    KC_TAPP,
-    KC_TAPU,
-    KC_TAPD,
-#endif
+    TK_PRNT,
+    TK_UP,
+    TK_DOWN,
 
     // Start of custom keycode range for keyboards and keymaps - always leave at the end
     SAFE_RANGE

@@ -432,11 +432,11 @@ See also: [Mod-Tap](mod_tap.md)
 
 See also: [Tapping Term Keys](tap_hold#tapping-term-keys)
 
-| Key       | Description                                                           |
-|-----------|-----------------------------------------------------------------------|
-| `KC_TAPP` | "Tapping Term Print": Types the current tapping term, in milliseconds |
-| `KC_TAPU` | "Tapping Term Up": Increases the current tapping term by 5ms          |
-| `KC_TAPD` | "Tapping Term Down": Decreases the current tapping term by 5ms        |
+| Key       | Description                                                                |
+|-----------|----------------------------------------------------------------------------|
+| `TK_PRINT`| "Tapping Term Keys Print": Types the current tapping term, in milliseconds |
+| `TK_UP`   | "Tapping Term Keys Up": Increases the current tapping term by 5ms          |
+| `TK_DOWN` | "Tapping Term Keys Down": Decreases the current tapping term by 5ms        |
 
 ## RGB Lighting :id=rgb-lighting
 

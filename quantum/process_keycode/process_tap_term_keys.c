@@ -33,11 +33,11 @@ bool process_tap_term_keys(uint16_t keycode, keyrecord_t *record) {
                 return true;
 
             case TK_UP:
-                tapping_term += 5;
+                tapping_term += TAP_TERM_INCREMENT;
                 return true;
 
             case TK_DOWN:
-                tapping_term -= 5;
+                tapping_term -= TAP_TERM_INCREMENT;
                 return true;
         }
     }

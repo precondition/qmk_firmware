@@ -19,4 +19,8 @@
 #include "quantum.h"
 #include "action_tapping.h"
 
+#ifndef TAP_TERM_INCREMENT
+#   define TAP_TERM_INCREMENT 5
+#endif
+
 bool process_tap_term_keys(uint16_t keycode, keyrecord_t *record);
